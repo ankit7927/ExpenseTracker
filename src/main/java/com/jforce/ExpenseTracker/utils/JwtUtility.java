@@ -4,6 +4,7 @@ import com.jforce.ExpenseTracker.data.models.UserModel;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -20,7 +21,7 @@ public class JwtUtility {
     }
 
     public String generateJWTToken(Map<String, Object> claims, String userId, boolean access) {
-        int expire = 60 * 60 * (access ? 1 : 24 );
+        int expire = 60 * 60 * (access ? 2 : 24 );
 
         return Jwts.builder()
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -52,7 +53,7 @@ public class JwtUtility {
     }
 
     // fixme change usermodel to userdetails
-    public boolean validateToken(String token, UserModel userDetails) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         String userId = getUserId(token);
 
         return (userId.equals(userDetails.getUsername())) && !tokenExpired(token);

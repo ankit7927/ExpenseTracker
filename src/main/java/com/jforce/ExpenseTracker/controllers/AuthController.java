@@ -21,8 +21,7 @@ public class AuthController {
         if (userModel.getUsername().isEmpty() || userModel.getPassword().isEmpty())
             return new ResponseEntity<>("Username password are required", HttpStatus.BAD_REQUEST);
         try {
-            authService.userLogin(userModel);
-            return null;
+            return new ResponseEntity<>(authService.userLogin(userModel), HttpStatus.OK);
         }catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

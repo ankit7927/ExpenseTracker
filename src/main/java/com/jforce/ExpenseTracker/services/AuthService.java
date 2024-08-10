@@ -4,7 +4,10 @@ import com.jforce.ExpenseTracker.data.models.UserModel;
 import com.jforce.ExpenseTracker.data.repositories.UserRepository;
 import com.jforce.ExpenseTracker.utils.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 @Service
 public class AuthService {
@@ -14,9 +17,15 @@ public class AuthService {
     @Autowired
     private JwtUtility jwtUtility;
 
-    public void userLogin(UserModel userModel) throws Exception {
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+
+    public String userLogin(UserModel userModel) throws Exception {
+        System.out.println("reached");
         UserModel userWithUsername = userRepository.getUserWithUsername(userModel.getUsername());
         if (userWithUsername.getPassword().equals(userModel.getPassword())) {
+            return jwtUtility.generateJWTToken(new HashMap<>(), userModel.getUsername(), true);
 
         } else throw new Exception("Wrong username or password");
     }
