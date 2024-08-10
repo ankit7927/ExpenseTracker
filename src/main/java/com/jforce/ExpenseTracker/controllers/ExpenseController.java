@@ -1,15 +1,35 @@
 package com.jforce.ExpenseTracker.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.jforce.ExpenseTracker.data.models.ExpenseModel;
+import com.jforce.ExpenseTracker.services.ExpenseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("expense")
 public class ExpenseController {
 
+    @Autowired
+    private ExpenseService expenseService;
+
     @GetMapping
-    public void test() {
-        System.out.println("test secure route");
+    public ResponseEntity<?> getUserExpenses() {
+        try {
+            return new ResponseEntity<>(expenseService.getUserExpenses(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("new")
+    public ResponseEntity<?> createExpense(@RequestBody ExpenseModel expenseModel) {
+        try {
+            expenseService.createExpense(expenseModel);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -62,6 +63,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             response.sendError(HttpStatus.FORBIDDEN.value(), "malformed token");
         } catch (AccessDeniedException accessDeniedException) {
             response.sendError(HttpStatus.UNAUTHORIZED.value(), "Access denied");
+        } catch (UsernameNotFoundException usernameNotFoundException) {
+            response.sendError(HttpStatus.NOT_FOUND.value(), "User not found");
         }
     }
 }

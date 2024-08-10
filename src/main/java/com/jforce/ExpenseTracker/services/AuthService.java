@@ -22,11 +22,10 @@ public class AuthService {
 
 
     public String userLogin(UserModel userModel) throws Exception {
-        System.out.println("reached");
         UserModel userWithUsername = userRepository.getUserWithUsername(userModel.getUsername());
+        if (userWithUsername == null) throw new Exception("User not found");
         if (userWithUsername.getPassword().equals(userModel.getPassword())) {
             return jwtUtility.generateJWTToken(new HashMap<>(), userModel.getUsername(), true);
-
         } else throw new Exception("Wrong username or password");
     }
 

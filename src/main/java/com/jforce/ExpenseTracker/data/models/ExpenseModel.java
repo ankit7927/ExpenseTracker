@@ -16,11 +16,13 @@ public class ExpenseModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    private String username;
+
     private String name;
 
     private float amount;
 
     private String date;
 
-    private String Description;
+    private String description;
 }
