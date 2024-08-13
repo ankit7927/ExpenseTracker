@@ -43,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         try {
             String token = header.substring(7);
-            String userId = jwtUtility.getUserId(token);
+            String userId = jwtUtility.getUsername(token);
 
             SecurityContext securityContext = SecurityContextHolder.getContext();
 
@@ -58,9 +58,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException expiredJwtException) {
-            response.sendError(HttpStatus.CONFLICT.value(), "token expired");
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "token expired");
         } catch (MalformedJwtException malformedJwtException) {
-            response.sendError(HttpStatus.FORBIDDEN.value(), "malformed token");
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "malformed token");
         } catch (AccessDeniedException accessDeniedException) {
             response.sendError(HttpStatus.UNAUTHORIZED.value(), "Access denied");
         } catch (UsernameNotFoundException usernameNotFoundException) {

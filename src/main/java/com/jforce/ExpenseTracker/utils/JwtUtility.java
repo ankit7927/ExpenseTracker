@@ -1,6 +1,5 @@
 package com.jforce.ExpenseTracker.utils;
 
-import com.jforce.ExpenseTracker.data.models.UserModel;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -48,13 +47,12 @@ public class JwtUtility {
         return extractClaims(token, Claims::getExpiration).before(new Date());
     }
 
-    public String getUserId(String token) {
+    public String getUsername(String token) {
         return extractClaims(token, Claims::getSubject);
     }
 
-    // fixme change usermodel to userdetails
     public boolean validateToken(String token, UserDetails userDetails) {
-        String userId = getUserId(token);
+        String userId = getUsername(token);
 
         return (userId.equals(userDetails.getUsername())) && !tokenExpired(token);
     }
